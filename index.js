@@ -106,9 +106,9 @@ app.get('/api/stock-price', (req, res) => {
 
 // API endpoint to get the trade history
 app.get('/api/trades', (req, res) => {
-    // const profit = balance - 10000;
-    const totalBalance = balance+invested+potentialProfit;
-    res.json({ tradeHistory, potentialProfit, totalBalance, balance});
+    const profit = balance - 10000;
+    const totalBalance = balance + (cp * stockHeld);
+    res.json({ tradeHistory, profit, totalBalance, balance});
 });
 
 // Start the Express server
