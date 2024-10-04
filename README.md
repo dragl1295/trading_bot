@@ -23,7 +23,9 @@ This trading bot simulates buying and selling stocks based on the moving average
     ```bash
     cd trading-bot
 
-3. Install the required packages:    
+3. Install the required packages:   
+
+    ```bash
     npm install express axios
 
 
