@@ -8,6 +8,9 @@ let balance = 10000;  // Starting balance
 let stockHeld = 0;
 let buyPrice = null;
 let cp = 0;
+let invested = 0;
+let potentialProfit = 0;
+
 
 let tradeHistory = [];
 let stockPrice = 100;  // Initial mock stock price
@@ -19,6 +22,8 @@ function buy(price) {
     if (!stockHeld && balance >= price) {
         stockHeld = Math.floor(balance / price);
         balance -= stockHeld * price;
+        invested += stockHeld * price;
+
         buyPrice = price;
         console.log(`Bought ${stockHeld} stocks at $${price}`);
         tradeHistory.push({ type: 'buy', price, balance });
@@ -29,6 +34,8 @@ function buy(price) {
 function sell(price) {
     if (stockHeld > 0) {  // Sell if holding stocks
         balance += stockHeld * price;
+        invested -= stockHeld * price;
+
         console.log(`Sold ${stockHeld} stocks at $${price}`);
         stockHeld = 0;
         buyPrice = null;
@@ -61,7 +68,7 @@ async function tradeBot() {
         console.log(`Current Moving Average: $${movingAverage.toFixed(2)}`);
 
         if (stockHeld > 0) {
-            const potentialProfit = (currentPrice * stockHeld) - (buyPrice * stockHeld);
+             potentialProfit = (currentPrice * stockHeld) - (buyPrice * stockHeld);
             console.log(`Potential profit if sold now: $${potentialProfit.toFixed(2)}`);
         }
 
@@ -103,8 +110,9 @@ app.get('/api/stock-price', (req, res) => {
 
 // API endpoint to get the trade history
 app.get('/api/trades', (req, res) => {
-    const profit = balance - 1000;
-    res.json({ tradeHistory, profit, balance});
+    // const profit = balance - 10000;
+    const totalBalance = balance+invested+potentialProfit;
+    res.json({ tradeHistory, potentialProfit, totalBalance, invested, balance});
 });
 
 // Start the Express server
