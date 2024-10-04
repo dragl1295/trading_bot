@@ -8,7 +8,6 @@ let balance = 10000;  // Starting balance
 let stockHeld = 0;
 let buyPrice = null;
 let cp = 0;
-let invested = 0;
 let potentialProfit = 0;
 
 
@@ -22,7 +21,6 @@ function buy(price) {
     if (!stockHeld && balance >= price) {
         stockHeld = Math.floor(balance / price);
         balance -= stockHeld * price;
-        invested += stockHeld * price;
 
         buyPrice = price;
         console.log(`Bought ${stockHeld} stocks at $${price}`);
@@ -34,8 +32,6 @@ function buy(price) {
 function sell(price) {
     if (stockHeld > 0) {  // Sell if holding stocks
         balance += stockHeld * price;
-        invested -= stockHeld * price;
-
         console.log(`Sold ${stockHeld} stocks at $${price}`);
         stockHeld = 0;
         buyPrice = null;
@@ -112,7 +108,7 @@ app.get('/api/stock-price', (req, res) => {
 app.get('/api/trades', (req, res) => {
     // const profit = balance - 10000;
     const totalBalance = balance+invested+potentialProfit;
-    res.json({ tradeHistory, potentialProfit, totalBalance, invested, balance});
+    res.json({ tradeHistory, potentialProfit, totalBalance, balance});
 });
 
 // Start the Express server
